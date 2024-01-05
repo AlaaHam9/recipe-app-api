@@ -4,7 +4,7 @@ name: Checks
 on: [push]
 
 jobs:
-    # The id of the job
+    # The id of the job.
     test-lint:
         # The name that we will see within the github actions interface
         name: Test and Lint
