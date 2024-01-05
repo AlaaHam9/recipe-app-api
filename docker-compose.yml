@@ -1,0 +1,20 @@
+# version of the docker compose that we will use
+version: '3.9'
+
+# the service name is app ,it will run the docker file, we will build the dockerfile inside our current directory, we will use the
+# root directory that we are runing the command from
+services:
+  app:
+    build:
+      context: .
+      args:
+        - DEV=true
+      #mapping the port on local machine to port inside the docker conatiner
+    ports:
+      - "8000:8000"
+      #we want the updates that we make to our code in local project to be reflected in the runing container in real time (avoid re build) (sync)
+    volumes:
+      - ./app:/app
+      # command to run the service
+    command: >
+      sh -c "python manage.py runserver 0.0.0.0:8000"
