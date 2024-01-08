@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 from django.contrib.auth.models import (
     BaseUserManager,
     PermissionsMixin,
@@ -32,3 +33,24 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects     = UserManager() # sign the user manager
 
     USERNAME_FIELD = 'email'
+
+
+class Recipe(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
+    description = models.CharField(max_length=255, blank=True)  # blank=True -> the field is allowed to be empty when validating a form.  (not required)
+    time_minutes = models.IntegerField()
+    price = models.DecimalField(max_digits=5, decimal_places=2)
+    link = models.CharField(max_length=255, blank=True)
+
+    def __str__(self) -> str:
+        return self.title
+
+class Tag(models.Model):
+    """Tag for filtering recipes."""
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)
+
+    def __str__(self) -> str:
+        return self.name
+
