@@ -41,7 +41,6 @@ class RecipeSerializer(serializers.ModelSerializer):
            recipe.ingredients.add(ingredient_obj)
 
 
-
     # override the create method to add ability to add tags in the creation, because rest framework not support the neasted serializer
     def create(self, validated_data):
         tags = validated_data.pop('tags', [])
@@ -64,7 +63,7 @@ class RecipeSerializer(serializers.ModelSerializer):
         if ingredients is not None:
             instance.ingredients.clear()
             self._get_or_create_ingredients(ingredients,instance)
-            
+
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
         instance.save()
@@ -75,5 +74,13 @@ class RecipeSerializer(serializers.ModelSerializer):
 class RecipeDetailSerializer(RecipeSerializer):
     """Serializer for recipe detail view."""
     class Meta(RecipeSerializer.Meta):
-        fields = RecipeSerializer.Meta.fields + ['description']
+        fields = RecipeSerializer.Meta.fields + ['description','image']
 
+# we add seperate serialaizer for  image because when we upload images we only need to accepts the image field
+class RecipeImageSerializer(serializers.ModelSerializer):
+    """Serialiazer for uploading images to recipes."""
+    class Meta:
+        model = Recipe
+        fields = ['id', 'image']
+        read_only_fields = ['id']
+        extra_kwargs = {'image': {'required': True}}

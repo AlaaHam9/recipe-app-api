@@ -15,6 +15,7 @@ services:
       #we want the updates that we make to our code in local project to be reflected in the runing container in real time (avoid re build) (sync)
     volumes:
       - ./app:/app
+      - dev-static-data:/vol/web
       # command to run the service
     command: >
       sh -c "python manage.py wait_for_db &&
@@ -25,6 +26,7 @@ services:
       - DB_NAME=devdb
       - DB_USER=devuser
       - DB_PASS=pass6015
+      - DEBUG=1
     depends_on:
       - db
 
@@ -40,3 +42,4 @@ services:
 
 volumes:
   dev-db-data:
+  dev-static-data:
